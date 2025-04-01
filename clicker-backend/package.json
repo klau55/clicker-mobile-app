@@ -4,6 +4,12 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start": "ts-node src/server.ts",
+    "dev": "ts-node-dev src/server.ts",
+    "build": "tsc",
+    "init-db": "ts-node -e \"import { initializeDatabase } from './src/db'; initializeDatabase().then(() => console.log('Database initialized!')).catch(err => console.error('Failed:', err))\"",
+    "drop-db": "ts-node -e \"import { Pool } from 'pg'; const pool = new Pool({user: 'postgres', host: 'localhost', database: 'postgres', password: 'NDKJB-UQJMP-4VL8W-XBLQX-MPCNR', port: 5432}); (async () => {try {await pool.query('DROP DATABASE IF EXISTS clickerdb;'); console.log('Database dropped!'); await pool.query('CREATE DATABASE clickerdb;'); console.log('Empty database created!');} catch (e) {console.error(e);} finally {pool.end();}})();\"",
+    "reset-db": "npm run drop-db && npm run init-db",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -24,6 +30,7 @@
     "@types/node": "^22.13.14",
     "@types/pg": "^8.11.11",
     "ts-node": "^10.9.2",
+    "ts-node-dev": "^2.0.0",
     "typescript": "^5.8.2"
   }
 }
