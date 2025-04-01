@@ -1,12 +1,15 @@
-export interface User {
+import { TextInputProps, TouchableOpacityProps, StyleProp, ViewStyle } from 'react-native';
+import { ReactNode } from 'react';
+
+export type User = {
   id: number;
   username: string;
   total_taps: number;
   created_at?: string;
   login_count?: number;
-}
+};
 
-export interface UserStats {
+export type UserStats = {
   username: string;
   total_taps: number;
   created_at: string;
@@ -14,33 +17,33 @@ export interface UserStats {
   tap_count_today: number;
   last_login: string;
   login_count: number;
-}
+};
 
-export interface AuthRequest {
+export type AuthRequest = {
   username: string;
   password: string;
-}
+};
 
-export interface AuthResponse {
-  message: string;
-  user: User;
-}
+export type AuthResponse = {
+  message?: string;
+  user?: User;
+};
 
-export interface LeaderboardEntry {
+export type LeaderboardEntry = {
   username: string;
   total_taps: number;
   rank?: number;
   hours_since_active?: number;
-}
+};
 
-export interface ApiResponse<T> {
+export type ApiResponse<T> = {
   success: boolean;
   data?: T;
   message?: string;
   errors?: string[];
-}
+};
 
-export interface PaginatedResponse<T> {
+export type PaginatedResponse<T> = {
   data: T[];
   pagination: {
     total: number;
@@ -48,18 +51,18 @@ export interface PaginatedResponse<T> {
     limit: number;
     pages: number;
   };
-}
+};
 
 export type FightStyle = 'punch' | 'kick' | 'rightPunch';
 
-export interface FightMove {
+export type FightMove = {
   style: FightStyle;
   power: number;
   animationDuration: number;
   soundEffect?: string;
-}
+};
 
-export interface ThemeColors {
+export type ThemeColors = {
   primary: string;
   secondary: string;
   accent: string;
@@ -67,12 +70,12 @@ export interface ThemeColors {
   text: string;
   error: string;
   success: string;
-}
+};
 
-export interface HomeScreenProps {
+export type HomeScreenProps = {
   user: User;
   setUser: UserSetterType;
-}
+};
 
 export type UserSetterType = React.Dispatch<React.SetStateAction<User | null>>;
 export type ThemeSetterType = React.Dispatch<React.SetStateAction<ThemeColors>>;
@@ -84,14 +87,64 @@ export type RootStackParamList = {
   Profile: { userId: number };
 };
 
-export class ApiError extends Error {
-  status: number;
-  errors?: string[];
+export type ValidationErrors = {
+  username?: string;
+  password?: string;
+};
 
-  constructor(message: string, status: number = 500, errors?: string[]) {
-    super(message);
-    this.name = 'ApiError';
-    this.status = status;
-    this.errors = errors;
-  }
-} 
+export type ApiError = {
+  message: string;
+  [key: string]: any;
+};
+
+export type AuthScreenProps = {
+  setUser: UserSetterType;
+};
+
+export type FormInputProps = TextInputProps & {
+  label?: string;
+  error?: string;
+  showError?: boolean;
+  themedStyles?: any;
+};
+
+export type ButtonProps = TouchableOpacityProps & {
+  title: string;
+  loading?: boolean;
+  secondary?: boolean;
+  themedStyles?: any;
+};
+
+export type LeaderboardScreenProps = {
+  navigation: any;
+  user?: User;
+};
+
+export type PodiumDisplayProps = {
+  leaders: LeaderboardEntry[];
+};
+
+export type UserRankCardProps = {
+  user: User;
+  userRank: number;
+  userEntry?: LeaderboardEntry;
+};
+
+export type SettingsScreenProps = {
+  setUser: UserSetterType;
+};
+
+export type ThemeToggleProps = {
+  onToggle?: () => void;
+};
+
+export type SettingsGroupProps = {
+  title: string;
+  children: ReactNode;
+  style?: StyleProp<ViewStyle>;
+};
+
+export type LogoutButtonProps = {
+  setUser: UserSetterType;
+  style?: StyleProp<ViewStyle>;
+}; 

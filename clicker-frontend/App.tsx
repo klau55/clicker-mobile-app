@@ -8,22 +8,33 @@ import { HomeScreen } from './src/screens/HomeScreen';
 import { LeaderboardScreen } from './src/screens/LeaderboardScreen';
 import { SettingsScreen } from './src/screens/SettingsScreen';
 import { AuthScreen } from './src/screens/AuthScreen';
+import { ThemeProvider, useTheme } from './src/context/ThemeContext';
+import { StatusBar } from 'react-native';
+import { getThemeColors } from './src/styles/theme';
 
 const Tab = createBottomTabNavigator();
 
-export default function App() {
-  const [user, setUser] = useState<User | null>(null);
-
-  if (!user) {
-    return <AuthScreen setUser={setUser} />;
-  }
-
+const MainApp = ({ user, setUser }: { user: User, setUser: React.Dispatch<React.SetStateAction<User | null>> }) => {
+  const { isDark } = useTheme();
+  const colors = getThemeColors(isDark);
+  
   return (
     <NavigationContainer>
+      <StatusBar 
+        backgroundColor={isDark ? '#121212' : '#1a237e'} 
+        barStyle={isDark ? "light-content" : "light-content"} 
+      />
       <Tab.Navigator
         screenOptions={{
-          tabBarActiveTintColor: '#e91e63',
-          tabBarInactiveTintColor: 'gray',
+          tabBarActiveTintColor: colors.accent,
+          tabBarInactiveTintColor: colors.subtitle,
+          tabBarStyle: {
+            backgroundColor: colors.navBackground,
+            borderTopColor: colors.navBorder,
+          },
+          tabBarLabelStyle: {
+            fontSize: 12
+          }
         }}
       >
         <Tab.Screen 
@@ -71,3 +82,19 @@ export default function App() {
     </NavigationContainer>
   );
 }
+
+export const App = () => {
+  const [user, setUser] = useState<User | null>(null);
+
+  return (
+    <ThemeProvider>
+      {!user ? (
+        <AuthScreen setUser={setUser} />
+      ) : (
+        <MainApp user={user} setUser={setUser} />
+      )}
+    </ThemeProvider>
+  );
+}
+
+export default App;

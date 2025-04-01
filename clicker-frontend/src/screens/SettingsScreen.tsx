@@ -1,34 +1,46 @@
 import React from 'react';
-import { View, Text, Button } from 'react-native';
-import { UserSetterType } from '../types';
-import { styles } from '../styles';
+import { View, Text } from 'react-native';
+import { SettingsScreenProps } from '../types';
+import { styles, settingsStyles, getSettingsThemedStyles } from '../styles';
 import { BASE_URL } from '../constants';
+import { useTheme } from '../context/ThemeContext';
+import { getThemeColors } from '../styles/theme';
+import { ThemeToggle, SettingsGroup, LogoutButton } from '../components';
 
-interface SettingsScreenProps {
-  setUser: UserSetterType;
-}
-
-export function SettingsScreen({ setUser }: SettingsScreenProps) {
-  const handleLogout = () => {
-    setUser(null);
-  };
+export const SettingsScreen = ({ setUser }: SettingsScreenProps) => {
+  const { isDark } = useTheme();
+  const colors = getThemeColors(isDark);
+  const themedStyles = getSettingsThemedStyles(colors, isDark);
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Settings</Text>
+    <View style={{...styles.container, ...themedStyles.container}}>
+      <Text style={{...styles.title, ...themedStyles.title}}>Settings</Text>
       
-      <View style={styles.settingsGroup}>
-        <Text style={styles.settingsTitle}>Server Information</Text>
-        <Text style={styles.settingsDescription}>
+      {/* Theme Section */}
+      <SettingsGroup title="Appearance">
+        <ThemeToggle />
+      </SettingsGroup>
+      
+      {/* Server Info Section */}
+      <SettingsGroup title="Server Information">
+        <Text style={{...styles.settingsDescription, ...themedStyles.settingsDescription}}>
           This app is configured to connect to:
           {'\n'}{BASE_URL}
-          {'\n\n'}This is the correct address for the Android emulator.
         </Text>
-      </View>
+      </SettingsGroup>
       
-      <View style={styles.settingsButtonContainer}>
-        <Button title="Logout" onPress={handleLogout} />
-      </View>
+      {/* Version Info */}
+      <SettingsGroup title="About" style={settingsStyles.aboutSection}>
+        <Text style={{...settingsStyles.creditsText, ...themedStyles.creditsText}}>
+          Boxing Clicker - A fun punch counter app
+        </Text>
+        <Text style={{...settingsStyles.versionText, ...themedStyles.versionText}}>
+          Version 1.0.0
+        </Text>
+      </SettingsGroup>
+      
+      {/* Logout Button */}
+      <LogoutButton setUser={setUser} />
     </View>
   );
 } 

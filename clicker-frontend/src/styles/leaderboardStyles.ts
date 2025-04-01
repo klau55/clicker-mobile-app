@@ -1,5 +1,7 @@
 import { StyleSheet } from 'react-native';
+import { ThemeColors } from './theme';
 
+// Base styles that don't change with theme
 export const leaderboardStyles = StyleSheet.create({
   container: {
     flex: 1,
@@ -10,8 +12,6 @@ export const leaderboardStyles = StyleSheet.create({
     fontWeight: 'bold',
     marginVertical: 12,
     textAlign: 'center',
-    color: '#1a237e',
-    backgroundColor: 'rgba(0, 0, 0, 0.03)',
     paddingVertical: 8,
     borderRadius: 8,
   },
@@ -33,7 +33,6 @@ export const leaderboardStyles = StyleSheet.create({
     marginHorizontal: 5,
   },
   firstPlace: {
-    backgroundColor: '#ffd700', // Gold
     width: 100,
     height: 120,
     justifyContent: 'center',
@@ -41,10 +40,8 @@ export const leaderboardStyles = StyleSheet.create({
     borderTopLeftRadius: 8,
     borderTopRightRadius: 8,
     zIndex: 3,
-    elevation: 4,
   },
   secondPlace: {
-    backgroundColor: '#c0c0c0', // Silver
     width: 80,
     height: 95,
     justifyContent: 'center',
@@ -52,10 +49,8 @@ export const leaderboardStyles = StyleSheet.create({
     borderTopLeftRadius: 8,
     borderTopRightRadius: 8,
     zIndex: 2,
-    elevation: 3,
   },
   thirdPlace: {
-    backgroundColor: '#cd7f32', // Bronze
     width: 80,
     height: 70,
     justifyContent: 'center',
@@ -63,7 +58,6 @@ export const leaderboardStyles = StyleSheet.create({
     borderTopLeftRadius: 8,
     borderTopRightRadius: 8,
     zIndex: 1,
-    elevation: 2,
   },
   podiumUsername: {
     fontSize: 14,
@@ -83,12 +77,6 @@ export const leaderboardStyles = StyleSheet.create({
     width: 30,
     height: 30,
     borderRadius: 15,
-    backgroundColor: 'white',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 2,
-    elevation: 5,
   },
   
   // Regular list styles
@@ -99,8 +87,6 @@ export const leaderboardStyles = StyleSheet.create({
     borderRadius: 8,
     marginVertical: 4,
     padding: 10,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.1,
     shadowRadius: 1,
     elevation: 1,
@@ -123,45 +109,36 @@ export const leaderboardStyles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '500',
     marginLeft: 'auto',
-    color: '#1a237e',
   },
   emptyListText: {
     textAlign: 'center',
     fontStyle: 'italic',
-    color: '#888',
     marginVertical: 20,
   },
 
   // User rank styles
   userRankContainer: {
-    marginTop: 30,
-    marginHorizontal: 10,
+    marginTop: 25,
+    marginBottom: 10,
+    borderRadius: 12,
+    padding: 15,
   },
   userRankTitle: {
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: 'bold',
-    color: '#1a237e',
-    marginBottom: 10,
+    marginBottom: 12,
     textAlign: 'center',
   },
   userRankCard: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#f1f1f1',
     borderRadius: 10,
     padding: 15,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
     borderWidth: 1,
-    borderColor: '#e0e0e0',
   },
   userRankNumber: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#e91e63',
     marginRight: 15,
     minWidth: 50,
     textAlign: 'center',
@@ -172,11 +149,96 @@ export const leaderboardStyles = StyleSheet.create({
   userRankUsername: {
     fontSize: 16,
     fontWeight: 'bold',
-    color: '#333',
   },
   userRankScore: {
     fontSize: 14,
     marginTop: 3,
-    color: '#666',
+  },
+});
+
+// Function to get theme-aware styles
+export const getLeaderboardThemedStyles = (colors: ThemeColors, isDark: boolean) => ({
+  container: {
+    backgroundColor: colors.background,
+  },
+  sectionHeader: {
+    color: isDark ? '#90caf9' : colors.primary,
+    backgroundColor: isDark ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.03)',
+  },
+  emptyListText: {
+    color: colors.subtitle,
+  },
+  podiumContainer: {
+    backgroundColor: isDark ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.02)',
+    borderWidth: 1,
+    borderColor: isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.05)',
+    borderRadius: 12,
+    padding: 10,
+  },
+  firstPlace: {
+    backgroundColor: colors.podiumGold,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: isDark ? 0.6 : 0.3,
+    shadowRadius: 5,
+    elevation: 6,
+  },
+  secondPlace: {
+    backgroundColor: colors.podiumSilver,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: isDark ? 0.5 : 0.2,
+    shadowRadius: 3,
+    elevation: 4,
+  },
+  thirdPlace: {
+    backgroundColor: colors.podiumBronze,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: isDark ? 0.4 : 0.2,
+    shadowRadius: 2,
+    elevation: 3,
+  },
+  podiumUsername: {
+    color: colors.podiumText,
+  },
+  podiumScore: {
+    color: colors.podiumText,
+  },
+  medalContainer: {
+    backgroundColor: isDark ? '#2d2d2d' : 'white',
+    borderWidth: 1,
+    borderColor: isDark ? 'rgba(255, 255, 255, 0.2)' : 'rgba(0, 0, 0, 0.1)',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 2,
+    elevation: 5,
+  },
+  userRankContainer: {
+    backgroundColor: isDark ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.02)',
+    borderWidth: 1,
+    borderColor: isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.05)',
+  },
+  userRankTitle: {
+    color: isDark ? '#90caf9' : colors.primary,
+  },
+  userRankCard: {
+    backgroundColor: isDark ? '#2d2d2d' : '#f1f1f1',
+    borderColor: colors.cardBorder,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: isDark ? 0.5 : 0.2,
+    shadowRadius: 3,
+    elevation: 4,
+  },
+  userRankNumber: {
+    color: isDark ? '#f48fb1' : colors.accent,
+  },
+  userRankUsername: {
+    color: colors.text,
+  },
+  userRankScore: {
+    color: isDark ? '#bbbbbb' : colors.subtitle,
   },
 }); 

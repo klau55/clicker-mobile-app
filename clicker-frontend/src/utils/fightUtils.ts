@@ -20,17 +20,14 @@ export const getImageSource = (isAnimating: boolean, currentMove: FightStyle) =>
   }
 };
 
-/**
- * Returns the color for the given move type
- */
 export const getMoveColor = (moveType: FightStyle): string => {
   switch (moveType) {
     case 'punch':
-      return '#ff7043'; // orange
+      return '#D36B00';
     case 'kick':
-      return '#7e57c2'; // purple
+      return '#2666CF';
     case 'rightPunch':
-      return '#42a5f5'; // blue
+      return '#9B0000';
     default:
       return '#e0e0e0';
   }

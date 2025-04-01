@@ -1,6 +1,8 @@
 import { StyleSheet } from 'react-native';
 export { homeStyles } from './homeStyles';
-export { leaderboardStyles } from './leaderboardStyles';
+export { leaderboardStyles, getLeaderboardThemedStyles } from './leaderboardStyles';
+export { settingsStyles, getSettingsThemedStyles } from './settingsStyles';
+export { authStyles, getAuthThemedStyles } from './authStyles';
 
 export const styles = StyleSheet.create({
   container: {

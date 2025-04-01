@@ -1,34 +1,21 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { 
   View, 
   Text, 
   TextInput, 
-  TouchableOpacity, 
   KeyboardAvoidingView, 
   Platform, 
-  ScrollView,
-  ActivityIndicator,
-  Alert
+  ScrollView
 } from 'react-native';
-import axios, { AxiosError } from 'axios';
-import { UserSetterType, ApiError, AuthRequest, AuthResponse } from '../types';
-import { authStyles } from '../styles/authStyles';
+import { ValidationErrors, AuthScreenProps } from '../types';
+import { authStyles, getAuthThemedStyles } from '../styles';
 import { BASE_URL } from '../constants';
+import { useTheme } from '../context/ThemeContext';
+import { getThemeColors } from '../styles/theme';
+import { FormInput, Button } from '../components';
+import { validateAuthForm, loginUser, registerUser } from '../utils/authUtils';
 
-interface AuthScreenProps {
-  setUser: UserSetterType;
-}
-
-interface ValidationErrors {
-  username?: string;
-  password?: string;
-}
-
-interface ErrorResponse {
-  message: string;
-}
-
-export function AuthScreen({ setUser }: AuthScreenProps) {
+export const AuthScreen = ({ setUser }: AuthScreenProps) => {
   // Form state
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -37,74 +24,48 @@ export function AuthScreen({ setUser }: AuthScreenProps) {
   
   // UI state
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isCheckingUsername, setIsCheckingUsername] = useState(false);
   const [isSuccessMessage, setIsSuccessMessage] = useState(false);
   
   // Validation state
   const [errors, setErrors] = useState<ValidationErrors>({});
-  const [touched, setTouched] = useState<{[key: string]: boolean}>({});
+  const [showErrors, setShowErrors] = useState(false);
   
-  // Clear message when switching between login and register
+  // Refs for input fields
+  const usernameRef = useRef<TextInput>(null);
+  const passwordRef = useRef<TextInput>(null);
+  
+  // Theme
+  const { isDark } = useTheme();
+  const colors = getThemeColors(isDark);
+  const themedStyles = getAuthThemedStyles(colors, isDark);
+  
   useEffect(() => {
+    setUsername('');
+    setPassword('');
+    setErrors({});
+    setShowErrors(false);
     setMessage('');
     setIsSuccessMessage(false);
-    setErrors({});
+    
+    if (usernameRef.current) {
+      usernameRef.current.clear();
+    }
+    
+    if (passwordRef.current) {
+      passwordRef.current.clear();
+    }
   }, [showRegister]);
   
-  // Form validation
   const validateForm = (): boolean => {
-    const newErrors: ValidationErrors = {};
-    
-    if (!username.trim()) {
-      newErrors.username = 'Username is required';
-    } else if (username.length < 3) {
-      newErrors.username = 'Username must be at least 3 characters';
-    }
-    
-    if (!password.trim()) {
-      newErrors.password = 'Password is required';
-    } else if (password.length < 6) {
-      newErrors.password = 'Password must be at least 6 characters';
-    }
-    
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
+    const validationErrors = validateAuthForm(username, password);
+    setErrors(validationErrors);
+    return Object.keys(validationErrors).length === 0;
   };
   
-  // Handle field blur for validation
-  const handleBlur = (field: string) => {
-    setTouched({...touched, [field]: true});
-    validateForm();
-  };
-
-  const checkUsernameAvailability = async (username: string) => {
-    if (!username.trim() || username.length < 3) return;
-    
-    setIsCheckingUsername(true);
-    try {
-      const response = await axios.get<{username: string, exists: boolean}>(`${BASE_URL}/api/check-username`, {
-        params: { username }
-      });
-      
-      if (response.data.exists) {
-        setMessage(`Username '${username}' is already taken`);
-        setIsSuccessMessage(false);
-      } else {
-        setMessage(`Username '${username}' is available`);
-        setIsSuccessMessage(true);
-      }
-    } catch (error) {
-      const err = error as AxiosError;
-      console.log('Username check error:', err.message);
-      // Don't show error to user for this check
-    } finally {
-      setIsCheckingUsername(false);
-    }
-  };
-
   const handleRegister = async () => {
     setMessage('');
     setIsSuccessMessage(false);
+    setShowErrors(true);
     
     if (!validateForm()) {
       return;
@@ -113,31 +74,19 @@ export function AuthScreen({ setUser }: AuthScreenProps) {
     setIsSubmitting(true);
     
     try {
-      const requestData: AuthRequest = { username, password };
-      const response = await axios.post<AuthResponse>(`${BASE_URL}/api/register`, requestData);
+      const result = await registerUser(username, password);
       
-      if (response.data?.user) {
-        // Automatically log in after successful registration
-        const loginResponse = await axios.post<AuthResponse>(`${BASE_URL}/api/login`, requestData);
+      if (result.user) {
+        setMessage('Registration successful! Welcome to Boxing Clicker!');
+        setIsSuccessMessage(true);
         
-        if (loginResponse.data?.user) {
-          setMessage('Registration successful! Welcome to Boxing Clicker!');
-          setIsSuccessMessage(true);
-          
-          // Wait 1 second before transitioning to main screen
-          setTimeout(() => {
-            setUser(loginResponse.data.user);
-          }, 2000);
-        }
-      }
-    } catch (error) {
-      const err = error as AxiosError<ErrorResponse>;
-      console.log('Register error:', err.response?.data || err.message);
-      
-      if (err.response?.data?.message) {
-        setMessage(err.response.data.message);
+        setTimeout(() => {
+          if (result.user) {
+            setUser(result.user);
+          }
+        }, 1500);
       } else {
-        setMessage('Registration failed. Please try again later.');
+        setMessage(result.message || 'Registration failed');
       }
     } finally {
       setIsSubmitting(false);
@@ -147,6 +96,7 @@ export function AuthScreen({ setUser }: AuthScreenProps) {
   const handleLogin = async () => {
     setMessage('');
     setIsSuccessMessage(false);
+    setShowErrors(true);
     
     if (!validateForm()) {
       return;
@@ -155,202 +105,136 @@ export function AuthScreen({ setUser }: AuthScreenProps) {
     setIsSubmitting(true);
     
     try {
-      const requestData: AuthRequest = { username, password };
-      const response = await axios.post<AuthResponse>(`${BASE_URL}/api/login`, requestData);
+      const result = await loginUser(username, password);
       
-      if (response.data?.user) {
-        setUser(response.data.user);
+      if (result.user) {
+        setUser(result.user);
         setMessage('Login successful!');
         setIsSuccessMessage(true);
-      }
-    } catch (error) {
-      const err = error as AxiosError<ErrorResponse>;
-      console.log('Login error:', err.response?.data || err.message);
-      
-      if (err.response?.status === 429) {
-        setMessage('Too many login attempts. Please try again later.');
-      } else if (err.response?.data?.message) {
-        setMessage(err.response.data.message);
       } else {
-        setMessage('Login failed. Please check your credentials and try again.');
+        setMessage(result.message || 'Login failed');
       }
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  // Handle network errors
-  const handleConnectionError = () => {
-    Alert.alert(
-      "Connection Error",
-      `Unable to connect to the server at ${BASE_URL}. Please check your internet connection and try again.`,
-      [{ text: "OK" }]
-    );
+  const toggleRegister = () => {
+    setShowRegister(!showRegister);
   };
 
   return (
     <KeyboardAvoidingView 
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      style={authStyles.container}
+      style={{...authStyles.container, ...themedStyles.container}}
     >
       <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
         <View style={authStyles.contentContainer}>
-          <Text style={authStyles.title}>Boxing Clicker</Text>
-          <Text style={authStyles.smallText}>Server: {BASE_URL}</Text>
+          <Text style={{...authStyles.title, ...themedStyles.title}}>Boxing Clicker</Text>
+          <Text style={{...authStyles.smallText, ...themedStyles.smallText}}>Server: {BASE_URL}</Text>
           
-          <View style={authStyles.card}>
+          <View style={{...authStyles.card, ...themedStyles.card}}>
             {showRegister ? (
               <>
-                <Text style={authStyles.subtitle}>Create Account</Text>
-                <TextInput
-                  style={[
-                    authStyles.input,
-                    touched.username && errors.username ? { borderColor: '#ff6b6b' } : {}
-                  ]}
+                <Text style={{...authStyles.subtitle, ...themedStyles.subtitle}}>Create Account</Text>
+                
+                <FormInput
+                  ref={usernameRef}
                   placeholder="Username"
-                  placeholderTextColor="#1a237e"
                   onChangeText={setUsername}
-                  onBlur={() => {
-                    handleBlur('username');
-                    if (username.trim() && username.length >= 3) {
-                      checkUsernameAvailability(username);
-                    }
-                  }}
-                  autoCapitalize="none"
-                  autoCorrect={false}
+                  defaultValue=""
                   editable={!isSubmitting}
+                  error={errors.username}
+                  showError={showErrors}
+                  themedStyles={themedStyles}
                 />
-                {touched.username && errors.username ? 
-                  <Text style={authStyles.errorText}>{errors.username}</Text> : null}
-                  
-                <TextInput
-                  style={[
-                    authStyles.input,
-                    touched.password && errors.password ? { borderColor: '#ff6b6b' } : {}
-                  ]}
+                
+                <FormInput
+                  ref={passwordRef}
                   placeholder="Password"
-                  placeholderTextColor="#1a237e"
                   secureTextEntry
                   onChangeText={setPassword}
-                  onBlur={() => handleBlur('password')}
-                  autoCapitalize="none"
-                  autoCorrect={false}
+                  defaultValue=""
                   editable={!isSubmitting}
+                  error={errors.password}
+                  showError={showErrors}
+                  themedStyles={themedStyles}
                 />
-                {touched.password && errors.password ? 
-                  <Text style={authStyles.errorText}>{errors.password}</Text> : null}
                 
-                <TouchableOpacity 
-                  style={[
-                    authStyles.primaryButton,
-                    isSubmitting ? authStyles.disabledButton : {}
-                  ]}
-                  onPress={handleRegister}
-                  disabled={isSubmitting}
-                >
-                  {isSubmitting ? (
-                    <ActivityIndicator color="#1a237e" size="small" />
-                  ) : (
-                    <Text style={authStyles.buttonText}>Register</Text>
-                  )}
-                </TouchableOpacity>
-                
-                <TouchableOpacity 
-                  style={authStyles.secondaryButton}
-                  onPress={() => {
-                    setShowRegister(false);
-                    setMessage('');
-                    setIsSuccessMessage(false);
-                    setTouched({});
-                  }}
-                  disabled={isSubmitting}
-                >
-                  <Text style={authStyles.secondaryButtonText}>
-                    Already have an account? Login
-                  </Text>
-                </TouchableOpacity>
+                <View style={authStyles.buttonContainer}>
+                  <Button 
+                    title="Create Account"
+                    loading={isSubmitting}
+                    disabled={isSubmitting}
+                    onPress={handleRegister}
+                    themedStyles={themedStyles}
+                  />
+                  
+                  <Button 
+                    title="Back to Login"
+                    secondary
+                    disabled={isSubmitting}
+                    onPress={toggleRegister}
+                    themedStyles={themedStyles}
+                  />
+                </View>
               </>
             ) : (
               <>
-                <Text style={authStyles.subtitle}>Welcome Back</Text>
-                <TextInput
-                  style={[
-                    authStyles.input,
-                    touched.username && errors.username ? { borderColor: '#ff6b6b' } : {}
-                  ]}
+                <Text style={{...authStyles.subtitle, ...themedStyles.subtitle}}>Welcome Back</Text>
+                
+                <FormInput
+                  ref={usernameRef}
                   placeholder="Username"
-                  placeholderTextColor="#1a237e"
                   onChangeText={setUsername}
-                  onBlur={() => handleBlur('username')}
-                  autoCapitalize="none"
-                  autoCorrect={false}
+                  defaultValue=""
                   editable={!isSubmitting}
+                  error={errors.username}
+                  showError={showErrors}
+                  themedStyles={themedStyles}
                 />
-                {touched.username && errors.username ? 
-                  <Text style={authStyles.errorText}>{errors.username}</Text> : null}
-                  
-                <TextInput
-                  style={[
-                    authStyles.input,
-                    touched.password && errors.password ? { borderColor: '#ff6b6b' } : {}
-                  ]}
+                
+                <FormInput
+                  ref={passwordRef}
                   placeholder="Password"
-                  placeholderTextColor="#1a237e"
                   secureTextEntry
                   onChangeText={setPassword}
-                  onBlur={() => handleBlur('password')}
-                  autoCapitalize="none"
-                  autoCorrect={false}
+                  defaultValue=""
                   editable={!isSubmitting}
+                  error={errors.password}
+                  showError={showErrors}
+                  themedStyles={themedStyles}
                 />
-                {touched.password && errors.password ? 
-                  <Text style={authStyles.errorText}>{errors.password}</Text> : null}
                   
-                <TouchableOpacity 
-                  style={[
-                    authStyles.primaryButton,
-                    isSubmitting ? authStyles.disabledButton : {}
-                  ]}
-                  onPress={handleLogin}
-                  disabled={isSubmitting}
-                >
-                  {isSubmitting ? (
-                    <ActivityIndicator color="#1a237e" size="small" />
-                  ) : (
-                    <Text style={authStyles.buttonText}>Login</Text>
-                  )}
-                </TouchableOpacity>
-                
-                <TouchableOpacity 
-                  style={authStyles.secondaryButton}
-                  onPress={() => {
-                    setShowRegister(true);
-                    setMessage('');
-                    setIsSuccessMessage(false);
-                    setTouched({});
-                  }}
-                  disabled={isSubmitting}
-                >
-                  <Text style={authStyles.secondaryButtonText}>
-                    Don't have an account? Register
-                  </Text>
-                </TouchableOpacity>
+                <View style={authStyles.buttonContainer}>
+                  <Button 
+                    title="Login"
+                    loading={isSubmitting}
+                    disabled={isSubmitting}
+                    onPress={handleLogin}
+                    themedStyles={themedStyles}
+                  />
+                  
+                  <Button 
+                    title="Create Account"
+                    secondary
+                    disabled={isSubmitting}
+                    onPress={toggleRegister}
+                    themedStyles={themedStyles}
+                  />
+                </View>
               </>
             )}
+            
+            {message ? (
+              <Text style={[
+                {...authStyles.message, ...themedStyles.message},
+                isSuccessMessage ? themedStyles.successMessage : themedStyles.errorMessage
+              ]}>
+                {message}
+              </Text>
+            ) : null}
           </View>
-
-          {message ? (
-            <Text style={[
-              authStyles.message,
-              isSuccessMessage && authStyles.successMessage
-            ]}>
-              {message}
-            </Text>
-          ) : null}
-          
-          {isCheckingUsername && (
-            <Text style={authStyles.smallText}>Checking username availability...</Text>
-          )}
         </View>
       </ScrollView>
     </KeyboardAvoidingView>

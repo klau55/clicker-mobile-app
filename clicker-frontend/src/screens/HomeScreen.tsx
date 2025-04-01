@@ -4,13 +4,17 @@ import { FightStyle, HomeScreenProps } from '../types';
 import { styles, homeStyles } from '../styles';
 import { getImageSource, getMoveColor } from '../utils/fightUtils';
 import { sendTap, updateUserTaps } from '../api/userApi';
+import { useTheme } from '../context/ThemeContext';
+import { getThemeColors } from '../styles/theme';
 
-export function HomeScreen({ user, setUser }: HomeScreenProps) {
+export const HomeScreen = ({ user, setUser }: HomeScreenProps) => {
   const [message, setMessage] = useState('');
   const [isAnimating, setIsAnimating] = useState(false);
   const [currentMove, setCurrentMove] = useState<FightStyle>('punch');
   const [combo, setCombo] = useState<number>(0);
   const [comboTimeout, setComboTimeout] = useState<NodeJS.Timeout | null>(null);
+  const { isDark } = useTheme();
+  const colors = getThemeColors(isDark);
 
   const performMove = async (moveType: FightStyle) => {
     setMessage('');
@@ -19,14 +23,13 @@ export function HomeScreen({ user, setUser }: HomeScreenProps) {
       return;
     }
 
-    // Set the current move animation
     setCurrentMove(moveType);
     setIsAnimating(true);
     
     // Reset animation after a short delay
     setTimeout(() => {
       setIsAnimating(false);
-    }, 100);
+    }, 150);
 
     // Handle combo counter
     if (comboTimeout) {
@@ -63,14 +66,14 @@ export function HomeScreen({ user, setUser }: HomeScreenProps) {
   }, [comboTimeout]);
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Boxing Center</Text>
-      <Text style={styles.subtitle}>Welcome, {user.username}!</Text>
+    <View style={{...styles.container, backgroundColor: colors.background}}>
+      <Text style={{...styles.title, color: colors.text}}>Boxing Center</Text>
+      <Text style={{...styles.subtitle, color: colors.subtitle}}>Welcome, {user.username}!</Text>
       
       <View style={homeStyles.statsContainer}>
-        <View style={homeStyles.statItem}>
-          <Text style={homeStyles.statLabel}>TOTAL PUNCHES</Text>
-          <Text style={homeStyles.statValue}>{user.total_taps}</Text>
+        <View style={{...homeStyles.statItem, backgroundColor: colors.statsBg}}>
+          <Text style={{...homeStyles.statLabel, color: colors.statsLabel}}>TOTAL PUNCHES</Text>
+          <Text style={{...homeStyles.statValue, color: colors.statsValue}}>{user.total_taps}</Text>
         </View>
         
         {combo > 0 && (
@@ -88,8 +91,8 @@ export function HomeScreen({ user, setUser }: HomeScreenProps) {
         />
       </View>
 
-      <View style={homeStyles.controlsContainer}>
-        <Text style={homeStyles.controlsTitle}>TRAINING CONTROLS</Text>
+      <View>
+        <Text style={{...homeStyles.controlsTitle, color: colors.statsLabel}}>TRAINING CONTROLS</Text>
         
         <View style={homeStyles.moveButtonsContainer}>
           <TouchableOpacity 
@@ -118,7 +121,7 @@ export function HomeScreen({ user, setUser }: HomeScreenProps) {
         </TouchableOpacity>
       </View>
 
-      {message ? <Text style={styles.message}>{message}</Text> : null}
+      {message ? <Text style={{...styles.message, color: colors.error}}>{message}</Text> : null}
     </View>
   );
 } 
