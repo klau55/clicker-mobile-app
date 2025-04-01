@@ -56,13 +56,18 @@ const errorHandler = (err: Error, req: Request, res: Response, next: NextFunctio
 
 const app = express();
 
-// Security and utility middleware
-app.use(express.json({ limit: '1mb' })); // Limit payload size
-app.use(cors({
-    origin: process.env.NODE_ENV === "development" 
-        ? '*' 
-        : ['http://localhost:3000', 'http://localhost:19000', 'http://localhost:19006']
-}));
+// Basic middleware
+app.use(express.json({ limit: '1mb' }));
+
+// Simple CORS configuration for development
+if (process.env.NODE_ENV !== 'production') {
+    app.use(cors());
+} else {
+    app.use(cors({
+        origin: ['https://api.example.com'],
+        credentials: true
+    }));
+}
 
 // Apply rate limiting to certain routes
 app.use('/api/login', rateLimit(60 * 1000, 5)); // 5 requests per minute
@@ -98,7 +103,30 @@ if (require.main === module) {
         app.listen(PORT, '0.0.0.0', () => {
             console.log(`Server is running on port ${PORT}`);
             console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
-            console.log('Access the server from other devices using your computer\'s IP address');
+            console.log('Access URLs:');
+            console.log(`Local: http://localhost:${PORT}`);
+            try {
+                const networkInterfaces = require('os').networkInterfaces();
+                interface NetworkInterface {
+                    family: string;
+                    internal: boolean;
+                    address: string;
+                }
+                const ip = Object.values(networkInterfaces)
+                    .flat()
+                    .find((details: unknown): details is NetworkInterface => {
+                        const d = details as NetworkInterface;
+                        return d.family === 'IPv4' && 
+                            !d.internal &&
+                            d.address.startsWith('192.168');
+                    })?.address;
+                if (ip) {
+                    console.log(`Network: http://${ip}:${PORT}`);
+                    console.log(`Use this IP address in your app's configuration`);
+                }
+            } catch (err) {
+                console.log('Could not determine network IP');
+            }
         });
     }).catch(error => {
         console.error('Failed to initialize database:', error);

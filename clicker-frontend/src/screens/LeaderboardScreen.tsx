@@ -21,15 +21,12 @@ export function LeaderboardScreen({ navigation, user }: LeaderboardScreenProps) 
     setIsLoading(true);
     try {
       // Get all-time leaderboard
-      const allTime = await fetchAllTimeLeaderboard();
-      setAllTimeLeaders(allTime);
+      const allTime = await fetchAllTimeLeaderboard(user?.username);
+      setAllTimeLeaders(allTime.data);
       
-      // Find current user's rank if user is provided
-      if (user) {
-        const userPosition = allTime.findIndex(entry => entry.username === user.username);
-        if (userPosition !== -1) {
-          setUserRank(userPosition + 1); // +1 because array indices start at 0
-        }
+      // Set user rank if available
+      if (allTime.userRank) {
+        setUserRank(allTime.userRank);
       }
     } catch (error: any) {
       console.log('Leaderboard error:', error.response?.data || error.message);
@@ -143,7 +140,7 @@ export function LeaderboardScreen({ navigation, user }: LeaderboardScreenProps) 
     }
     
     return (
-      <View style={leaderboardStyles.userRankContainer}>
+      <View>
         <Text style={leaderboardStyles.userRankTitle}>Your Ranking</Text>
         <View style={leaderboardStyles.userRankCard}>
           <Text style={leaderboardStyles.userRankNumber}>#{userRank}</Text>

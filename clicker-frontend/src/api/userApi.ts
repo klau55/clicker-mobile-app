@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { User, LeaderboardEntry } from '../types';
+import { User, LeaderboardEntry, PaginatedResponse } from '../types';
 import { BASE_URL } from '../constants';
 
 /**
@@ -22,8 +22,35 @@ export const updateUserTaps = (
 
 /**
  * Fetches the all-time leaderboard
+ * @param username Optional username to get a specific user's rank
  */
-export const fetchAllTimeLeaderboard = async (): Promise<LeaderboardEntry[]> => {
-  const response = await axios.get(`${BASE_URL}/api/leaderboard`);
-  return response.data;
+export const fetchAllTimeLeaderboard = async (username?: string): Promise<{
+  data: LeaderboardEntry[],
+  userRank?: number
+}> => {
+  try {
+    const response = await axios.get<{
+      data: LeaderboardEntry[],
+      pagination: {
+        total: number,
+        page: number,
+        limit: number,
+        pages: number
+      },
+      userRank?: number
+    }>(`${BASE_URL}/api/leaderboard`, {
+      params: { 
+        limit: 100,
+        username 
+      }
+    });
+    
+    return {
+      data: response.data.data,
+      userRank: response.data.userRank
+    };
+  } catch (error) {
+    console.error('Error fetching leaderboard:', error);
+    throw error;
+  }
 };

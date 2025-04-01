@@ -26,7 +26,7 @@ export function HomeScreen({ user, setUser }: HomeScreenProps) {
     // Reset animation after a short delay
     setTimeout(() => {
       setIsAnimating(false);
-    }, 150);
+    }, 100);
 
     // Handle combo counter
     if (comboTimeout) {

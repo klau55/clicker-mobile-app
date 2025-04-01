@@ -235,20 +235,63 @@ const tapHandler: RequestHandler = async (req, res) => {
 // leaderboard
 const leaderboardHandler: RequestHandler = async (req, res) => {
     try {
-        // Enhanced leaderboard query with more information
+        const page = parseInt(req.query.page as string) || 1;
+        const limit = parseInt(req.query.limit as string) || 10;
+        const username = req.query.username as string;
+        const offset = (page - 1) * limit;
+
+        // Get total count first
+        const countQuery = `
+            SELECT COUNT(*) as total
+            FROM users
+            WHERE total_taps > 0
+        `;
+        const countResult = await pool.query(countQuery);
+        const total = parseInt(countResult.rows[0].total);
+
+        // Get user rank if username is provided
+        let userRank = null;
+        if (username) {
+            const rankQuery = `
+                SELECT rank 
+                FROM (
+                    SELECT username, 
+                           RANK() OVER (ORDER BY total_taps DESC) as rank
+                    FROM users 
+                    WHERE total_taps > 0
+                ) ranked
+                WHERE username = $1
+            `;
+            const rankResult = await pool.query(rankQuery, [username]);
+            if (rankResult.rows.length > 0) {
+                userRank = parseInt(rankResult.rows[0].rank);
+            }
+        }
+
+        // Enhanced leaderboard query with pagination
         const leaderboardQuery = `
             SELECT 
                 username, 
                 total_taps,
-                EXTRACT(EPOCH FROM (NOW() - COALESCE(last_active, created_at)))/3600 AS hours_since_active,
-                RANK() OVER (ORDER BY total_taps DESC) as rank
+                EXTRACT(EPOCH FROM (NOW() - COALESCE(last_active, created_at)))/3600 AS hours_since_active
             FROM users
+            WHERE total_taps > 0
             ORDER BY total_taps DESC
-            LIMIT 10
+            LIMIT $1 OFFSET $2
         `;
 
-        const result = await pool.query(leaderboardQuery);
-        res.json(result.rows);
+        const result = await pool.query(leaderboardQuery, [limit, offset]);
+        
+        res.json({
+            data: result.rows,
+            pagination: {
+                total,
+                page,
+                limit,
+                pages: Math.ceil(total / limit)
+            },
+            userRank
+        });
     } catch (error) {
         console.error("Error fetching leaderboard:", error);
         res.status(500).json({ message: "Internal server error" });
