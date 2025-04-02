@@ -16,26 +16,22 @@ export const checkUsernameExists = async (username: string): Promise<boolean> =>
 const registerHandler: RequestHandler = async (req, res) => {
   const { username, password } = req.body;
 
-  // Input validation
   if (!username || !password) {
     res.status(400).json({ message: 'Username and password are required' });
     return;
   }
 
-  // Username format validation
   if (username.length < 3 || username.length > 20) {
     res.status(400).json({ message: 'Username must be between 3 and 20 characters' });
     return;
   }
 
-  // Password validation - relying on frontend validation mostly
   if (password.length < 6) {
     res.status(400).json({ message: 'Password must be at least 6 characters long' });
     return;
   }
 
   try {
-    // Start transaction
     const client = await pool.connect();
 
     try {
@@ -185,7 +181,6 @@ const tapHandler: RequestHandler = async (req, res) => {
     try {
       await client.query('BEGIN');
 
-      // Update taps with a single query that returns the updated value
       const updateQuery = `
                 UPDATE users 
                 SET 
@@ -203,7 +198,7 @@ const tapHandler: RequestHandler = async (req, res) => {
         return;
       }
 
-      // Log the tap in a separate activity table
+      // Log the tap in a separate activity table (not used atm)
       const logQuery = `
                 INSERT INTO tap_activity (user_id, tap_time)
                 SELECT id, NOW() FROM users WHERE username = $1

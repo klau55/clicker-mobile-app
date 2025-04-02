@@ -62,7 +62,6 @@ export const LeaderboardScreen = ({ navigation, user }: LeaderboardScreenProps) 
         <ActivityIndicator size="large" color={colors.primary} style={{ marginTop: 20 }} />
       ) : (
         <ScrollView showsVerticalScrollIndicator={false}>
-          {/* All-time Champions Section */}
           <Text
             style={{
               ...leaderboardStyles.sectionHeader,

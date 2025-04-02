@@ -76,7 +76,6 @@ export const registerUser = async (
     const response = await axios.post<AuthResponse>(`${BASE_URL}/api/register`, requestData);
 
     if (response.data?.user) {
-      // Auto login after registration
       const loginResponse = await loginUser(username, password);
       return loginResponse;
     }

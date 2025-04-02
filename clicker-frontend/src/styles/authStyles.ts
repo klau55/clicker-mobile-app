@@ -1,7 +1,6 @@
 import { StyleSheet } from 'react-native';
 import { ThemeColors } from './theme';
 
-// Base styles that don't change with theme
 export const authStyles = StyleSheet.create({
   container: {
     flex: 1,

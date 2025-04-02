@@ -37,7 +37,7 @@ describe('Tap API tests', () => {
 
       expect(response.status).toBe(200);
       expect(response.body.username).toBe('tapuser');
-      expect(response.body.total_taps).toBe(11); // Should be incremented from 10
+      expect(response.body.total_taps).toBe(11);
 
       // Verify in the database
       const dbResult = await pool.query('SELECT total_taps FROM users WHERE username = $1', [

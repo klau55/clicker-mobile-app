@@ -16,12 +16,10 @@ export const SettingsScreen = ({ setUser }: SettingsScreenProps) => {
     <View style={{ ...styles.container, ...themedStyles.container }}>
       <Text style={{ ...styles.title, ...themedStyles.title }}>Settings</Text>
 
-      {/* Theme Section */}
       <SettingsGroup title="Appearance">
         <ThemeToggle />
       </SettingsGroup>
 
-      {/* Server Info Section */}
       <SettingsGroup title="Server Information">
         <Text style={{ ...styles.settingsDescription, ...themedStyles.settingsDescription }}>
           This app is configured to connect to:
@@ -30,7 +28,6 @@ export const SettingsScreen = ({ setUser }: SettingsScreenProps) => {
         </Text>
       </SettingsGroup>
 
-      {/* Version Info */}
       <SettingsGroup title="About" style={settingsStyles.aboutSection}>
         <Text style={{ ...settingsStyles.creditsText, ...themedStyles.creditsText }}>
           Boxing Clicker - A fun punch counter app
@@ -40,7 +37,6 @@ export const SettingsScreen = ({ setUser }: SettingsScreenProps) => {
         </Text>
       </SettingsGroup>
 
-      {/* Logout Button */}
       <LogoutButton setUser={setUser} />
     </View>
   );

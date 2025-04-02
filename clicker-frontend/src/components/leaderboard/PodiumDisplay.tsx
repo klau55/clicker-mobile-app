@@ -13,12 +13,12 @@ const MedalIcon = ({ position }: { position: number }) => {
   const themedStyles = getLeaderboardThemedStyles(colors, isDark);
 
   const iconName: 'medal' | 'medal-outline' = 'medal';
-  let color = colors.podiumBronze; // Bronze default
+  let color = colors.podiumBronze;
 
   if (position === 1) {
-    color = colors.podiumGold; // Gold
+    color = colors.podiumGold;
   } else if (position === 2) {
-    color = colors.podiumSilver; // Silver
+    color = colors.podiumSilver;
   }
 
   return (
@@ -40,7 +40,6 @@ export const PodiumDisplay = ({ leaders }: PodiumDisplayProps) => {
 
   return (
     <View style={{ ...leaderboardStyles.podiumContainer, ...themedStyles.podiumContainer }}>
-      {/* Second Place */}
       <View style={leaderboardStyles.podiumPlace}>
         {second && (
           <>
@@ -60,7 +59,6 @@ export const PodiumDisplay = ({ leaders }: PodiumDisplayProps) => {
         )}
       </View>
 
-      {/* First Place */}
       <View style={leaderboardStyles.podiumPlace}>
         {first && (
           <>
@@ -80,7 +78,6 @@ export const PodiumDisplay = ({ leaders }: PodiumDisplayProps) => {
         )}
       </View>
 
-      {/* Third Place */}
       <View style={leaderboardStyles.podiumPlace}>
         {third && (
           <>

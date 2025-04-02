@@ -1,19 +1,17 @@
 import { Pool } from 'pg';
 import dotenv from 'dotenv';
 
-// Load environment variables
 dotenv.config();
 
 // Database configuration
 const pool = new Pool({
   user: process.env.DB_USER || 'postgres',
   host: process.env.DB_HOST || 'localhost',
-  database: 'postgres', // Connect to postgres database to drop/create the application database
+  database: 'postgres',
   password: process.env.DB_PASSWORD,
   port: process.env.DB_PORT ? parseInt(process.env.DB_PORT) : 5432,
 });
 
-// Database name from environment or default
 const dbName = process.env.DB_NAME || 'clickerdb';
 
 async function dropAndCreateDatabase() {

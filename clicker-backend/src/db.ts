@@ -1,19 +1,17 @@
 import { Pool, PoolConfig, QueryResult, QueryResultRow } from 'pg';
 
-// Read environment variables or use defaults
+// Read environment variables
 const dbConfig: PoolConfig = {
   user: process.env.DB_USER || 'postgres',
   host: process.env.DB_HOST || 'localhost',
   database: process.env.DB_NAME || 'clickerdb',
   password: process.env.DB_PASSWORD,
   port: process.env.DB_PORT ? parseInt(process.env.DB_PORT) : 5432,
-  // Add connection pool settings
   max: 20, // Maximum number of clients in the pool
   idleTimeoutMillis: 30000, // How long a client is allowed to remain idle before being closed
   connectionTimeoutMillis: 2000, // How long to wait for a connection
 };
 
-// Create the pool
 export const pool = new Pool(dbConfig);
 
 // Add event listeners for pool errors

@@ -148,6 +148,7 @@ clicker-mobile-app/
 │   ├── src/
 │   │   ├── controllers/   # Request handlers
 │   │   ├── routes/        # API routes
+│   │   ├── scripts/       # Scripts for package json
 │   │   ├── models/        # Database models
 │   │   ├── utils/         # Utilities and helpers
 │   │   ├── tests/         # Test files

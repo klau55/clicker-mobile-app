@@ -56,7 +56,7 @@ describe('Leaderboard API tests', () => {
       // Verify correct pages calculation: 4 users with taps > 0, limit 2 = 2 pages
       expect(response.body.pagination.pages).toBe(2);
 
-      // Should be the top 2 users
+      // Should be the top 2 users by total_taps
       expect(response.body.data[0].username).toBe('user1');
       expect(response.body.data[1].username).toBe('user3');
     });
@@ -66,7 +66,7 @@ describe('Leaderboard API tests', () => {
 
       expect(response.status).toBe(200);
       expect(response.body).toHaveProperty('userRank');
-      expect(response.body.userRank).toBe(2); // user3 is ranked #2
+      expect(response.body.userRank).toBe(2);
     });
   });
 });
