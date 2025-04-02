@@ -11,7 +11,7 @@ The app features a clean, intuitive interface with both light and dark mode supp
 ### Features
 
 - **User Authentication**: Secure registration and login system
-- **Interactive Tapping**: Animated boxing moves with sound effects
+- **Interactive Tapping**: Animated boxing moves
 - **Global Leaderboard**: Compete with other users worldwide
 - **User Profiles**: View personal stats and achievements
 - **Theme Support**: Toggle between light and dark mode
