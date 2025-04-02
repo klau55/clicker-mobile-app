@@ -78,12 +78,6 @@ if (process.env.NODE_ENV !== 'production') {
 // Apply rate limiting to certain routes
 app.use('/api/login', rateLimit(60 * 1000, 5)); // 5 requests per minute
 app.use('/api/register', rateLimit(60 * 1000, 3)); // 3 requests per minute
-
-// Main routes
-app.get('/', (req: Request, res: Response) => {
-  res.send('Clicker backend is running...');
-});
-
 app.use('/api', userRoutes);
 
 // Static files for production

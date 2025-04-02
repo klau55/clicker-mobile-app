@@ -30,7 +30,7 @@ const getServerUrl = () => {
   }
 
   // For Android emulator
-  if (Platform.OS === 'android' && !Constants.isDevice) {
+  if (Platform.OS === 'android') {
     return 'http://10.0.2.2:3000';
   }
 
@@ -47,4 +47,4 @@ console.log({
   debuggerHost: Constants.manifest?.debuggerHost,
   developmentIP: getDevelopmentIP(),
   baseUrl: BASE_URL,
-});
+}); 

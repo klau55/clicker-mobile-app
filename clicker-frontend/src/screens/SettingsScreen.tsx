@@ -1,8 +1,8 @@
 import React from 'react';
 import { View, Text } from 'react-native';
 import { SettingsScreenProps } from '../types';
-import { styles, settingsStyles, getSettingsThemedStyles } from '../styles';
 import { BASE_URL } from '../constants';
+import { styles, settingsStyles, getSettingsThemedStyles } from '../styles';
 import { useTheme } from '../context/ThemeContext';
 import { getThemeColors } from '../styles/theme';
 import { ThemeToggle, SettingsGroup, LogoutButton } from '../components';

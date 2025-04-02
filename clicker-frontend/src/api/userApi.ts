@@ -1,6 +1,6 @@
 import axios from 'axios';
-import { User, LeaderboardEntry, PaginatedResponse } from '../types';
 import { BASE_URL } from '../constants';
+import { User, LeaderboardEntry } from '../types';
 
 /**
  * Sends a tap to the server and returns the updated tap count
