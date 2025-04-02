@@ -1,6 +1,6 @@
 import axios, { AxiosError } from 'axios';
 import { AuthRequest, AuthResponse, ApiError, ValidationErrors, User } from '../types';
-import { BASE_URL } from '../constants';
+import { BASE_URL } from '../constants/constants';
 
 /**
  * Validate login/registration form

@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { View, Text, TextInput, KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
 import { ValidationErrors, AuthScreenProps } from '../types';
 import { authStyles, getAuthThemedStyles } from '../styles';
-import { BASE_URL } from '../constants';
+import { BASE_URL } from '../constants/constants';
 import { useTheme } from '../context/ThemeContext';
 import { getThemeColors } from '../styles/theme';
 import { FormInput, Button } from '../components';

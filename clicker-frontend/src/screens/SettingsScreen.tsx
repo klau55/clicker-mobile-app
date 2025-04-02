@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text } from 'react-native';
 import { SettingsScreenProps } from '../types';
-import { BASE_URL } from '../constants';
+import { BASE_URL } from '../constants/constants';
 import { styles, settingsStyles, getSettingsThemedStyles } from '../styles';
 import { useTheme } from '../context/ThemeContext';
 import { getThemeColors } from '../styles/theme';
