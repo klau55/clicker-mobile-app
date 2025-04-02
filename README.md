@@ -1,6 +1,6 @@
 # Boxing Clicker App
 
-A fullstack mobile application - clicker game in kickboxing styling with a leaderboard system.
+A mobile application - clicker game in kickboxing styling with a leaderboard system.
 
 ## Overview
 
