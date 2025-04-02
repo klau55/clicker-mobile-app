@@ -2,16 +2,22 @@
 
 A fullstack mobile application for tracking boxing taps with a leaderboard system.
 
-## Features
+## Overview
 
-- User registration and login
-- Tap counter with animations
-- Global leaderboard with rankings
-- User profile with stats
-- Dark mode / light mode theme
-- Responsive design
+Boxing Clicker is an interactive mobile application designed for boxing enthusiasts to track their training progress. Users can register an account, perform various boxing moves (punch, right punch, kick), and track their progress on a global leaderboard. The app offers an engaging experience with animations, sound effects, and real-time tap counting.
 
-## Tech Stack
+The app features a clean, intuitive interface with both light and dark mode support. Users can view their ranking among other players and track their personal statistics. The backend provides secure authentication and persistent data storage, ensuring users can track their progress over time.
+
+### Features
+
+- **User Authentication**: Secure registration and login system
+- **Interactive Tapping**: Animated boxing moves with sound effects
+- **Global Leaderboard**: Compete with other users worldwide
+- **User Profiles**: View personal stats and achievements
+- **Theme Support**: Toggle between light and dark mode
+- **Responsive Design**: Works on various device sizes
+
+### Tech Stack
 
 - **Frontend**: React Native / Expo
 - **Backend**: Node.js with Express
@@ -19,92 +25,120 @@ A fullstack mobile application for tracking boxing taps with a leaderboard syste
 - **Authentication**: Custom JWT implementation
 - **Code Quality**: ESLint, Prettier
 
-## Getting Started
+## How to Run
+
+This section provides detailed instructions for setting up and running the Boxing Clicker app on your computer.
 
 ### Prerequisites
 
-- Node.js (v14+)
-- npm or yarn
-- PostgreSQL
+- **Node.js** (v14+): [Download](https://nodejs.org/)
+- **npm** or **yarn**: Included with Node.js
+- **PostgreSQL**: [Download](https://www.postgresql.org/download/)
+- **Expo Go** (for mobile testing): [Download on App Store](https://apps.apple.com/app/expo-go/id982107779) or [Google Play](https://play.google.com/store/apps/details?id=host.exp.exponent)
 
-### Environment Setup
+### Step 1: Clone Repository
 
-1. Clone the repository:
-
-   ```
-   git clone https://github.com/yourusername/clicker-mobile-app.git
-   cd clicker-mobile-app
-   ```
-
-2. Install dependencies:
-
-   ```
-   npm install
-   cd clicker-backend && npm install
-   cd ../clicker-frontend && npm install
-   cd ..
-   ```
-
-3. Database Setup:
-   - Make sure PostgreSQL is running
-   - Create a `.env` file in the `clicker-backend` directory with:
-     ```
-     DB_USER=postgres
-     DB_HOST=localhost
-     DB_NAME=clickerdb
-     DB_PASSWORD=your_password
-     DB_PORT=5432
-     PORT=3000
-     ```
-   - Initialize the database:
-     ```
-     npm run init-db
-     ```
-
-### Running the App
-
-**Start both backend and frontend with a single command:**
-
+```bash
+git clone https://github.com/klau55/clicker-mobile-app
+cd clicker-mobile-app
 ```
-npm start
+
+### Step 2: Install Dependencies
+
+Install dependencies for all parts of the application:
+
+```bash
+# Root dependencies
+npm install
+
+# Backend dependencies
+cd clicker-backend
+npm install
+
+# Frontend dependencies
+cd ../clicker-frontend
+npm install
+
+# Return to root
+cd ..
+```
+
+### Step 3: Database Setup
+
+1. **Start PostgreSQL** on your computer
+2. **Create Environment File**:
+   - Create a `.env` file in the `clicker-backend` directory with:
+   ```
+   DB_USER=postgres
+   DB_HOST=localhost
+   DB_NAME=clickerdb
+   DB_PASSWORD=your_password  # Use your PostgreSQL password
+   DB_PORT=5432
+   PORT=3000
+   ```
+3. **Initialize Database**:
+   ```bash
+   npm run init-db
+   ```
+
+### Step 4: Frontend Configuration
+
+1. **Find Your IP Address**:
+   - On Windows: Run `ipconfig` in Command Prompt and look for IPv4 Address
+   - On Mac/Linux: Run `ifconfig` in Terminal and look for inet address
+   
+2. **Create Frontend Environment File**:
+   - Create a `.env` file in the `clicker-frontend` directory with:
+   ```
+   DEVELOPMENT_IP=your.ip.address.here  # Replace with your actual IP (you can see it when running backend)
+   ```
+
+> **Note**: The IP address is crucial for connecting your mobile device to the backend server running on your computer.
+
+### Step 5: Start the Application
+
+Run backend with:
+
+```bash
+npm run start:backend
+```
+
+and frontend in another terminal:
+
+```bash
+npm run start:fronted
 ```
 
 This will:
-
 - Start the backend server on port 3000
-- Start the frontend Expo development server
+- Launch the Expo development server
 
-**Run on specific platforms:**
+### Step 6: Connect to the App
 
-- Android: `npm run android`
-- iOS: `npm run ios`
-- Web: `npm run web`
+#### On a Physical Device:
+1. Install the Expo Go app on your mobile device
+2. Scan the QR code shown in the terminal with your camera
+3. The app will open in Expo Go
 
-**Run just the backend with hot-reloading:**
+#### On an Emulator:
+- For Android: `npm run android`
+- For iOS: `npm run ios`
 
-```
-npm run dev:backend
-```
+#### On the Web:
+- `npm run web`
 
-### Database Management
+### Troubleshooting
 
-- **Initialize database**: `npm run init-db`
-- **Reset database**: `npm run reset-db`
+- **Connection Issues**: Make sure your mobile device is on the same WiFi network as your computer
+- **Database Errors**: Verify PostgreSQL is running and credentials are correct
+- **Port Conflicts**: If port 3000 is in use, change the `PORT` in backend `.env` file
 
-### Testing
+### Additional Commands
 
-Run the backend tests:
-
-```
-npm test
-```
-
-### Code Quality
-
-The project uses ESLint and Prettier to maintain code quality and consistent formatting.
-
-- **Lint code**: `npm run lint`
-- **Format code**: `npm run format`
+- **Reset Database**: `npm run reset-db`
+- **Run Tests**: `npm test`
+- **Lint Code**: `npm run lint`
+- **Format Code**: `npm run format`
 
 ## Project Structure
 

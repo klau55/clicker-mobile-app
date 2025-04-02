@@ -1,3 +1,6 @@
+// Import and configure dotenv first
+require('dotenv').config();
+
 module.exports = {
   name: 'Boxing Clicker',
   slug: 'boxing-clicker',
