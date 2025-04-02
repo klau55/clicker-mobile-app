@@ -99,4 +99,4 @@ export const homeStyles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 12,
   },
-}); 
+});

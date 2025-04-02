@@ -14,15 +14,21 @@ import { getThemeColors } from './src/styles/theme';
 
 const Tab = createBottomTabNavigator();
 
-const MainApp = ({ user, setUser }: { user: User, setUser: React.Dispatch<React.SetStateAction<User | null>> }) => {
+const MainApp = ({
+  user,
+  setUser,
+}: {
+  user: User;
+  setUser: React.Dispatch<React.SetStateAction<User | null>>;
+}) => {
   const { isDark } = useTheme();
   const colors = getThemeColors(isDark);
-  
+
   return (
     <NavigationContainer>
-      <StatusBar 
-        backgroundColor={isDark ? '#121212' : '#1a237e'} 
-        barStyle={isDark ? "light-content" : "light-content"} 
+      <StatusBar
+        backgroundColor={isDark ? '#121212' : '#1a237e'}
+        barStyle={isDark ? 'light-content' : 'light-content'}
       />
       <Tab.Navigator
         screenOptions={{
@@ -33,13 +39,13 @@ const MainApp = ({ user, setUser }: { user: User, setUser: React.Dispatch<React.
             borderTopColor: colors.navBorder,
           },
           tabBarLabelStyle: {
-            fontSize: 12
-          }
+            fontSize: 12,
+          },
         }}
       >
-        <Tab.Screen 
-          name="Home" 
-          options={{ 
+        <Tab.Screen
+          name="Home"
+          options={{
             title: 'Home',
             tabBarLabel: 'Home',
             headerShown: false,
@@ -50,10 +56,10 @@ const MainApp = ({ user, setUser }: { user: User, setUser: React.Dispatch<React.
         >
           {props => <HomeScreen {...props} user={user} setUser={setUser} />}
         </Tab.Screen>
-        
-        <Tab.Screen 
-          name="Leaderboard" 
-          options={{ 
+
+        <Tab.Screen
+          name="Leaderboard"
+          options={{
             title: 'Leaderboard',
             tabBarLabel: 'Leaderboard',
             headerShown: false,
@@ -64,10 +70,10 @@ const MainApp = ({ user, setUser }: { user: User, setUser: React.Dispatch<React.
         >
           {props => <LeaderboardScreen {...props} user={user} />}
         </Tab.Screen>
-        
-        <Tab.Screen 
-          name="Settings" 
-          options={{ 
+
+        <Tab.Screen
+          name="Settings"
+          options={{
             title: 'Settings',
             tabBarLabel: 'Settings',
             headerShown: false,
@@ -81,20 +87,16 @@ const MainApp = ({ user, setUser }: { user: User, setUser: React.Dispatch<React.
       </Tab.Navigator>
     </NavigationContainer>
   );
-}
+};
 
 export const App = () => {
   const [user, setUser] = useState<User | null>(null);
 
   return (
     <ThemeProvider>
-      {!user ? (
-        <AuthScreen setUser={setUser} />
-      ) : (
-        <MainApp user={user} setUser={setUser} />
-      )}
+      {!user ? <AuthScreen setUser={setUser} /> : <MainApp user={user} setUser={setUser} />}
     </ThemeProvider>
   );
-}
+};
 
 export default App;

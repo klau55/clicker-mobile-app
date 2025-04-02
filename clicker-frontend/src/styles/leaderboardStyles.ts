@@ -18,7 +18,7 @@ export const leaderboardStyles = StyleSheet.create({
   leaderboardList: {
     marginBottom: 20,
   },
-  
+
   // Podium related styles
   podiumContainer: {
     flexDirection: 'row',
@@ -78,7 +78,7 @@ export const leaderboardStyles = StyleSheet.create({
     height: 30,
     borderRadius: 15,
   },
-  
+
   // Regular list styles
   leaderItem: {
     flexDirection: 'row',
@@ -177,7 +177,7 @@ export const getLeaderboardThemedStyles = (colors: ThemeColors, isDark: boolean)
   },
   firstPlace: {
     backgroundColor: colors.podiumGold,
-    shadowColor: "#000",
+    shadowColor: '#000',
     shadowOffset: { width: 0, height: 3 },
     shadowOpacity: isDark ? 0.6 : 0.3,
     shadowRadius: 5,
@@ -185,7 +185,7 @@ export const getLeaderboardThemedStyles = (colors: ThemeColors, isDark: boolean)
   },
   secondPlace: {
     backgroundColor: colors.podiumSilver,
-    shadowColor: "#000",
+    shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: isDark ? 0.5 : 0.2,
     shadowRadius: 3,
@@ -193,7 +193,7 @@ export const getLeaderboardThemedStyles = (colors: ThemeColors, isDark: boolean)
   },
   thirdPlace: {
     backgroundColor: colors.podiumBronze,
-    shadowColor: "#000",
+    shadowColor: '#000',
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: isDark ? 0.4 : 0.2,
     shadowRadius: 2,
@@ -226,7 +226,7 @@ export const getLeaderboardThemedStyles = (colors: ThemeColors, isDark: boolean)
   userRankCard: {
     backgroundColor: isDark ? '#2d2d2d' : '#f1f1f1',
     borderColor: colors.cardBorder,
-    shadowColor: "#000",
+    shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: isDark ? 0.5 : 0.2,
     shadowRadius: 3,
@@ -241,4 +241,4 @@ export const getLeaderboardThemedStyles = (colors: ThemeColors, isDark: boolean)
   userRankScore: {
     color: isDark ? '#bbbbbb' : colors.subtitle,
   },
-}); 
+});

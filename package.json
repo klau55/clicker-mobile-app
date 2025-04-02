@@ -1,0 +1,38 @@
+{
+  "name": "clicker-mobile-app",
+  "version": "1.0.0",
+  "description": "A mobile app that tracks boxing taps with a backend leaderboard",
+  "main": "index.js",
+  "scripts": {
+    "start": "concurrently --kill-others \"npm run start:backend\" \"npm run start:frontend\"",
+    "start:backend": "cd clicker-backend && npm start",
+    "start:frontend": "cd clicker-frontend && npx expo start",
+    "dev:backend": "cd clicker-backend && npm run dev",
+    "init-db": "cd clicker-backend && npm run init-db",
+    "reset-db": "cd clicker-backend && npm run reset-db",
+    "test": "cd clicker-backend && npm test",
+    "android": "cd clicker-frontend && npm run android",
+    "ios": "cd clicker-frontend && npm run ios",
+    "web": "cd clicker-frontend && npm run web",
+    "lint": "eslint --fix \"**/*.{js,jsx,ts,tsx}\" --fix",
+    "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,md}\""
+  },
+  "keywords": [
+    "boxing",
+    "clicker",
+    "mobile-app",
+    "leaderboard"
+  ],
+  "author": "klau55",
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^6.21.0",
+    "@typescript-eslint/parser": "^6.21.0",
+    "concurrently": "^8.2.2",
+    "eslint": "^8.57.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-react": "^7.34.1",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "prettier": "^3.2.5"
+  },
+  "license": "ISC"
+}

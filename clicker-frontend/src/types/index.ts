@@ -147,4 +147,4 @@ export type SettingsGroupProps = {
 export type LogoutButtonProps = {
   setUser: UserSetterType;
   style?: StyleProp<ViewStyle>;
-}; 
+};

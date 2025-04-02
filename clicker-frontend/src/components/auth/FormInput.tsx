@@ -22,7 +22,7 @@ export const FormInput = forwardRef<TextInput, FormInputProps>(
       },
       errorText: {
         color: isDark ? '#ff8a80' : '#ff6b6b',
-      }
+      },
     };
 
     return (
@@ -33,7 +33,7 @@ export const FormInput = forwardRef<TextInput, FormInputProps>(
           style={[
             authStyles.input,
             defaultThemedStyles.input,
-            showError && error ? defaultThemedStyles.inputError : {}
+            showError && error ? defaultThemedStyles.inputError : {},
           ]}
           placeholderTextColor={isDark ? '#aaaaaa' : '#1a237e'}
           autoCapitalize="none"
@@ -41,14 +41,14 @@ export const FormInput = forwardRef<TextInput, FormInputProps>(
           {...props}
         />
         {showError && error ? (
-          <Text style={[authStyles.errorText, defaultThemedStyles.errorText]}>
-            {error}
-          </Text>
+          <Text style={[authStyles.errorText, defaultThemedStyles.errorText]}>{error}</Text>
         ) : null}
       </View>
     );
   }
 );
+
+FormInput.displayName = 'FormInput';
 
 const styles = StyleSheet.create({
   container: {
@@ -58,5 +58,5 @@ const styles = StyleSheet.create({
     marginBottom: 5,
     fontSize: 14,
     fontWeight: '500',
-  }
-}); 
+  },
+});

@@ -10,29 +10,29 @@ export const ThemeToggle = ({ onToggle }: ThemeToggleProps) => {
   const { toggleTheme, isDark } = useTheme();
   const colors = getThemeColors(isDark);
   const themedStyles = getSettingsThemedStyles(colors, isDark);
-  
+
   const handleToggle = () => {
     toggleTheme();
     if (onToggle) {
       onToggle();
     }
   };
-  
+
   return (
     <View style={settingsStyles.themeRow}>
-      <Text style={{...settingsStyles.themeText, ...themedStyles.themeText}}>
+      <Text style={{ ...settingsStyles.themeText, ...themedStyles.themeText }}>
         {isDark ? 'Dark Mode' : 'Light Mode'}
       </Text>
-      <TouchableOpacity 
-        onPress={handleToggle} 
-        style={{...settingsStyles.themeButton, ...themedStyles.themeButton}}
+      <TouchableOpacity
+        onPress={handleToggle}
+        style={{ ...settingsStyles.themeButton, ...themedStyles.themeButton }}
       >
-        <MaterialCommunityIcons 
-          name={isDark ? "weather-night" : "white-balance-sunny"} 
-          size={24} 
-          color={themedStyles.themeIcon.color} 
+        <MaterialCommunityIcons
+          name={isDark ? 'weather-night' : 'white-balance-sunny'}
+          size={24}
+          color={themedStyles.themeIcon.color}
         />
       </TouchableOpacity>
     </View>
   );
-}; 
+};

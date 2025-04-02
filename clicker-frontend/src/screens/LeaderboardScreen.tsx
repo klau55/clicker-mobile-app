@@ -22,7 +22,7 @@ export const LeaderboardScreen = ({ navigation, user }: LeaderboardScreenProps) 
     try {
       const allTime = await fetchAllTimeLeaderboard(user?.username);
       setAllTimeLeaders(allTime.data);
-      
+
       if (allTime.userRank) {
         setUserRank(allTime.userRank);
       }
@@ -36,7 +36,7 @@ export const LeaderboardScreen = ({ navigation, user }: LeaderboardScreenProps) 
 
   useEffect(() => {
     fetchLeaderboards();
-    
+
     const unsubscribe = navigation.addListener('focus', () => {
       fetchLeaderboards();
     });
@@ -47,36 +47,40 @@ export const LeaderboardScreen = ({ navigation, user }: LeaderboardScreenProps) 
   const userEntry = user && allTimeLeaders.find(entry => entry.username === user.username);
 
   return (
-    <View style={{
-      ...styles.container, 
-      ...leaderboardStyles.container,
-      ...themedStyles.container
-    }}>
-      <Text style={{...styles.title, color: colors.text}}>Leaderboard</Text>
-      
-      {message ? <Text style={{...styles.message, color: colors.error}}>{message}</Text> : null}
-      
+    <View
+      style={{
+        ...styles.container,
+        ...leaderboardStyles.container,
+        ...themedStyles.container,
+      }}
+    >
+      <Text style={{ ...styles.title, color: colors.text }}>Leaderboard</Text>
+
+      {message ? <Text style={{ ...styles.message, color: colors.error }}>{message}</Text> : null}
+
       {isLoading ? (
         <ActivityIndicator size="large" color={colors.primary} style={{ marginTop: 20 }} />
       ) : (
         <ScrollView showsVerticalScrollIndicator={false}>
           {/* All-time Champions Section */}
-          <Text style={{
-            ...leaderboardStyles.sectionHeader, 
-            ...themedStyles.sectionHeader
-          }}>All-time Champions</Text>
-          
+          <Text
+            style={{
+              ...leaderboardStyles.sectionHeader,
+              ...themedStyles.sectionHeader,
+            }}
+          >
+            All-time Champions
+          </Text>
+
           {allTimeLeaders.length === 0 ? (
-            <Text style={{...leaderboardStyles.emptyListText, ...themedStyles.emptyListText}}>No records found</Text>
+            <Text style={{ ...leaderboardStyles.emptyListText, ...themedStyles.emptyListText }}>
+              No records found
+            </Text>
           ) : (
             <>
               <PodiumDisplay leaders={allTimeLeaders.slice(0, 3)} />
               {user && userRank && userEntry && (
-                <UserRankCard 
-                  user={user} 
-                  userRank={userRank} 
-                  userEntry={userEntry}
-                />
+                <UserRankCard user={user} userRank={userRank} userEntry={userEntry} />
               )}
             </>
           )}
@@ -84,4 +88,4 @@ export const LeaderboardScreen = ({ navigation, user }: LeaderboardScreenProps) 
       )}
     </View>
   );
-} 
+};

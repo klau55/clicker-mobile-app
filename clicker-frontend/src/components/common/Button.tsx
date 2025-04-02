@@ -1,20 +1,16 @@
 import React from 'react';
-import { 
-  TouchableOpacity, 
-  Text, 
-  ActivityIndicator, 
-} from 'react-native';
+import { TouchableOpacity, Text, ActivityIndicator } from 'react-native';
 import { useTheme } from '../../context/ThemeContext';
 import { getThemeColors } from '../../styles/theme';
 import { authStyles } from '../../styles';
 import { ButtonProps } from '../../types';
 
-export const Button = ({ 
-  title, 
-  loading = false, 
+export const Button = ({
+  title,
+  loading = false,
   secondary = false,
   themedStyles,
-  ...props 
+  ...props
 }: ButtonProps) => {
   const { isDark } = useTheme();
   const colors = getThemeColors(isDark);
@@ -41,17 +37,14 @@ export const Button = ({
         secondary ? authStyles.secondaryButton : authStyles.primaryButton,
         secondary ? defaultThemedStyles.secondaryButton : defaultThemedStyles.primaryButton,
         props.disabled ? authStyles.disabledButton : null,
-        props.style
+        props.style,
       ]}
       {...props}
     >
       {loading ? (
-        <ActivityIndicator 
-          size="small" 
-          color={isDark ? '#ffffff' : '#1a237e'} 
-        />
+        <ActivityIndicator size="small" color={isDark ? '#ffffff' : '#1a237e'} />
       ) : (
-        <Text 
+        <Text
           style={[
             secondary ? authStyles.secondaryButtonText : authStyles.buttonText,
             secondary ? defaultThemedStyles.secondaryButtonText : defaultThemedStyles.buttonText,
@@ -62,4 +55,4 @@ export const Button = ({
       )}
     </TouchableOpacity>
   );
-}; 
+};

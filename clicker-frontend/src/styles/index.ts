@@ -145,5 +145,5 @@ export const styles = StyleSheet.create({
   styleButtonTextActive: {
     color: 'white',
     fontWeight: 'bold',
-  }
-}); 
+  },
+});

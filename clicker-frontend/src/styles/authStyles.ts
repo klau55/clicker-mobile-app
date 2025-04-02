@@ -164,4 +164,4 @@ export const getAuthThemedStyles = (colors: ThemeColors, isDark: boolean) => ({
     backgroundColor: isDark ? 'rgba(0, 0, 0, 0.2)' : 'rgba(255, 255, 255, 0.1)',
     borderColor: 'rgba(255, 255, 255, 0.2)',
   },
-}); 
+});

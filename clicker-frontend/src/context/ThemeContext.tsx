@@ -16,7 +16,7 @@ const ThemeContext = createContext<ThemeContextType>({
   isDark: false,
 });
 
-export const ThemeProvider: React.FC<{children: React.ReactNode}> = ({ children }) => {
+export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [theme, setTheme] = useState<ThemeType>('light');
 
   // Load saved theme on startup
@@ -57,4 +57,4 @@ export const ThemeProvider: React.FC<{children: React.ReactNode}> = ({ children 
   );
 };
 
-export const useTheme = () => useContext(ThemeContext); 
+export const useTheme = () => useContext(ThemeContext);

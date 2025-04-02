@@ -9,17 +9,11 @@ export const SettingsGroup = ({ title, children, style }: SettingsGroupProps) =>
   const { isDark } = useTheme();
   const colors = getThemeColors(isDark);
   const themedStyles = getSettingsThemedStyles(colors, isDark);
-  
+
   return (
-    <View style={[
-      styles.settingsGroup,
-      themedStyles.settingsGroup,
-      style
-    ]}>
-      <Text style={{...styles.settingsTitle, ...themedStyles.settingsTitle}}>
-        {title}
-      </Text>
+    <View style={[styles.settingsGroup, themedStyles.settingsGroup, style]}>
+      <Text style={{ ...styles.settingsTitle, ...themedStyles.settingsTitle }}>{title}</Text>
       {children}
     </View>
   );
-}; 
+};

@@ -8,18 +8,14 @@ import { getThemeColors } from '../../styles/theme';
 export const LogoutButton = ({ setUser, style }: LogoutButtonProps) => {
   const { isDark } = useTheme();
   const colors = getThemeColors(isDark);
-  
+
   const handleLogout = () => {
     setUser(null);
   };
-  
+
   return (
     <View style={[styles.settingsButtonContainer, style]}>
-      <Button 
-        title="Logout" 
-        onPress={handleLogout}
-        color={colors.primary}
-      />
+      <Button title="Logout" onPress={handleLogout} color={colors.primary} />
     </View>
   );
-}; 
+};

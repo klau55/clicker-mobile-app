@@ -7,7 +7,7 @@ export const getImageSource = (isAnimating: boolean, currentMove: FightStyle) =>
   if (!isAnimating) {
     return require('../../assets/idle.png');
   }
-  
+
   switch (currentMove) {
     case 'punch':
       return require('../../assets/left-punch.png');
@@ -31,4 +31,4 @@ export const getMoveColor = (moveType: FightStyle): string => {
     default:
       return '#e0e0e0';
   }
-}; 
+};

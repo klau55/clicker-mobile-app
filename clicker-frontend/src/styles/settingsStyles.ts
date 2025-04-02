@@ -31,7 +31,7 @@ export const settingsStyles = StyleSheet.create({
   linkText: {
     textDecorationLine: 'underline',
     marginVertical: 5,
-  }
+  },
 });
 
 // Function to get theme-aware styles
@@ -59,7 +59,7 @@ export const getSettingsThemedStyles = (colors: ThemeColors, isDark: boolean) =>
     backgroundColor: isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)',
   },
   themeIcon: {
-    color: isDark ? "#f5f5f5" : "#ffb74d",
+    color: isDark ? '#f5f5f5' : '#ffb74d',
   },
   versionText: {
     color: colors.subtitle,
@@ -69,5 +69,5 @@ export const getSettingsThemedStyles = (colors: ThemeColors, isDark: boolean) =>
   },
   linkText: {
     color: colors.primary,
-  }
-}); 
+  },
+});

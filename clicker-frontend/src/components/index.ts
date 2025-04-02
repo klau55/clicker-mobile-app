@@ -11,4 +11,4 @@ export { UserRankCard } from './leaderboard/UserRankCard';
 // Settings components
 export { LogoutButton } from './settings/LogoutButton';
 export { SettingsGroup } from './settings/SettingsGroup';
-export { ThemeToggle } from './settings/ThemeToggle'; 
+export { ThemeToggle } from './settings/ThemeToggle';
