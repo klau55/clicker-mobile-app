@@ -4,6 +4,8 @@ A mobile application - clicker game in kickboxing styling with a leaderboard sys
 
 ## Overview
 
+[Video overview](https://www.youtube.com/shorts/EZ3sdFdGpOw)
+
 Boxing Clicker is an interactive mobile application with real-time tap counting. Basically the game is a clicker-type game in kickboxing setting.
 
 The app features a clean, intuitive interface with both light and dark mode support. Users can view their ranking among other players. The backend provides secure authentication and persistent data storage, ensuring users can track their progress over time.
